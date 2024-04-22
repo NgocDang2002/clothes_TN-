@@ -1,0 +1,29 @@
+<div class="mt-4">
+    <div class="row row_edit">
+        {{#each product}}
+            <div class="col-sm-7 col-lg-3 mt-4">
+                <div class="card" style="width: 18rem;">
+                    <a href="products/{{this.slug}}">
+                        <img src="{{this.image}}" class="card-img-top" alt="{{this.name}}">
+                    </a>
+                    <div class="card-body">
+                        <a href="products/{{this.slug}}">
+                            <h5 class="card-title">{{this.name}}</h5>
+                            <p class="card-text">{{this.description}}</p>
+                        </a>
+                        <div style="display: flex;
+                                    justify-content: center;
+                                    grid-gap: 9rem;
+                                    align-items: center;
+                                    margin-top: 10px; ">
+                            <p class="btn btn-primary">{{this.price}}</p>
+                            <i class="bi bi-cart-plus-fill" style="font-size: 25px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</div>
+
+<script></script>

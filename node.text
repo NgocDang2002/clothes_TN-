@@ -1,0 +1,21 @@
+
+npm node-sass
+https://www.npmjs.com/package/node-sass
+npm install sass --save-dev
+
+mongoose
+$ npm install mongoose
+
+
+slug
+npm i mongoose-slug-generator
+npm install mongoose-slug-generator@latest
+
+method-override
+npm install method-override
+
+Mongoose Delete Plugin
+npm install mongoose-delete
+
+mongoose-sequence
+npm install --save mongoose-sequence

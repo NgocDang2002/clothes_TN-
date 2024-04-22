@@ -1,0 +1,54 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-body-dark">
+  <div class="container">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">TND</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/news">News</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/products">Sản phẩm</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+          </li>
+          <li>
+              <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+              </form>
+          </li>
+          <li><i class="bi bi-bag-fill"></i></li>
+          {{#if isAuthenticated}}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img src="{{user.image}}" alt="{{user.name}}" class="user-avata">
+                  {{user.name}}
+                </a>
+              <ul class="dropdown-menu ml-auto">
+                <li><a class="dropdown-item" href="/products/create">Thêm sản Phẩm</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/products/stored">Quản lý sản Phẩm</a></li>
+                <li><a class="dropdown-item" href="/admin/user">Quản lý người dùng</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="logoutUser">Đăng xuất</a></li>
+              </ul>
+            </li>          
+          {{else}}
+            <li>
+              <a href="/admin/login">Đăng Nhập</a>
+              <a href="/admin/register">Đăng Ký</a>
+            </li>
+          {{/if}}
+        </ul>
+
+      </div>
+    </div>
+  </div>
+</nav>
+
+{{!-- <script src="/js/user.js"></script> --}}

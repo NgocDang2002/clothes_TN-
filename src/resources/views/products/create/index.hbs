@@ -1,0 +1,26 @@
+ <div class="mt-4">
+    <h3>Tạo sản phẩm</h3>
+    <form method="POST" action="/products/store" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="name" class="form-label">Tên sản phẩm</label>
+            <input type="text" class="form-control" id="name" name="name">
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">mô tả</label>
+            <input type="text" class="form-control" id="description" name="description">
+        </div>
+         <div class="mb-3">
+            <label for="image" class="form-label">Hình ảnh</label>
+            <input type="file" class="form-control" id="image" name="image">
+        </div>
+        <div class="mb-3">
+            <label for="color" class="form-label">Màu sản phẩm</label>
+            <input type="text" class="form-control" id="color" name="color">
+        </div>
+        <div class="mb-3">
+            <label for="price" class="form-label">Giá tiền</label>
+            <input type="text" class="form-control" id="price" name="price">
+        </div>
+        <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
+    </form>
+ </div>

@@ -1,0 +1,28 @@
+.bd-example .carousel-inner .active input {
+  height: 567.406px;
+}
+
+.woocommerce {
+  display: flex;
+  grid-gap: 1rem;
+  justify-content: center;
+}
+
+.row a {
+  text-decoration: none;
+  color: black;
+}
+
+.user-avata {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 4px;
+}
+
+.checkbox-select-all-options {
+  width: 160px;
+  margin: 0 16px;
+}
+
+/*# sourceMappingURL=app.css.map */
