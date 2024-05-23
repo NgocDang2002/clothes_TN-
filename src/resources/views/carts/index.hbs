@@ -1,0 +1,72 @@
+<div class="mt-4">
+    <h1>Giỏ hàng</h1>
+    <form id="checkoutForm" action="/carts/cartpayproduct" method="POST">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Chọn</th>
+                    <th scope="col" colspan="0">Sản Phẩm</th>
+                    <th scope="col">Đơn Giá</th>
+                    <th scope="col">Số Lượng</th>
+                    <th scope="col">Số Tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each carts}}
+                <tr>
+                    <th scope="row">{{sum @index 1}}</th>
+                    <td><input type="checkbox" name="selectedProducts" value="{{_id}}" class="product-checkbox"></td>
+                    <td style="display: flex;">
+                        <img style="width: 100px;" src="{{this.productid.image}}" alt="">
+                        <p>{{this.productid.name}}</p>
+                        <div>
+                            <p class="size">Size: {{size}}</p>
+                            <p class="color">Color: {{color}}</p>
+                        </div>
+                    </td>
+                    <td class="unit-price">{{this.productid.price}}</td>
+                    <td style="display: flex; align-items: center;">
+                        <button type="button" class="decrease-qty" style="width: 30px;" data-cart-id="{{_id}}">-</button>
+                        {{!-- <button type="button" class="decrease-qty" style="width: 30px;">-</button> --}}
+                        <span class="quantity" style="width: 30px;">{{quantity}}</span>
+                        {{!-- <button type="button" class="increase-qty" style="width: 30px;">+</button> --}}
+                        <button type="button" class="increase-qty" style="width: 30px;" data-cart-id="{{_id}}">+</button>
+
+                    </td>
+                    <td class="total-price">{{totalmoney}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <table>
+            <tr>
+                <td>Số tiền thanh toán</td>
+                <td id="totalAmount">0VND</td>
+                <td colspan="6">
+                    <button type="submit" name="bntCartPayProduct" id="bntCartPayProduct" 
+                        style="background: #ee4d2d; outline: 0; overflow: visible; position: relative; width: 13.125rem; height: 3rem;">
+                        Mua Hàng
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+
+<form id="btnPurchase-from" method="GET" ></form>
+
+<form id="IncreaseQuantity-from" method="POST"></form>
+{{!-- <form id="Update-CartProducts-from" method="POST"></form> --}}
+<form id="Update-CartProducts-from" method="POST">
+    <!-- Các trường ẩn để chứa newTotalMoney, newQuantity, Size và Color -->
+    <input type="hidden" id="newTotalMoneyInput" name="newTotalMoney">
+    <input type="hidden" id="newQuantityInput" name="newQuantity">
+    <input type="hidden" id="productSizeInput" name="productSize">
+    <input type="hidden" id="productColorInput" name="productColor">
+</form>
+
+
+<script src="/js/Cart.js"></script>
+

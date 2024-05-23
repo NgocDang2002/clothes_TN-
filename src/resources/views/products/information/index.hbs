@@ -2,12 +2,107 @@
     <div class="row">
         <div class="col-lg-7">
             <img style="width: 40%;" src="{{product.image}}" alt="">
-
         </div>
         <div class="col-lg-4">
             <h1>{{product.name}}</h1>
-            <p>{{product.description}}</p>
-            
+            <p style="color:red;">Giá tiền <span id="display-price">{{product.price}}</span></p>
+            <div class="mb-3">
+                <div class="form-group" id="sizes-container">
+                    <label for="sizes">Sizes:</label>
+                    {{#each sizes}}
+                        <div class="form-check">
+                            <input class="form-check-input size-radio" type="radio" name="size" id="{{this._id}}" value="{{this}}">
+                            <label class="form-check-label" for="size-{{this._id}}">
+                                {{this}}
+                            </label>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="form-group" id="colors-container">
+                    <label for="colors">Màu:</label>
+                    {{#each colors}}
+                        <div class="form-check">
+                            <input class="form-check-input color-radio" type="radio" name="color" id="{{this._id}}" value="{{this}}">
+                            <label class="form-check-label" for="color-{{this._id}}">
+                                {{this}}
+                            </label>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <button type="button" class="decrease-qty" style="width: 30px;">-</button>
+                <span class="quantity" style="width: 30px;">1</span>
+                <button type="button" class="increase-qty" style="width: 30px;">+</button>
+            </div>
+            <div style="display: flex;">
+                <button class="add-to-cart-btn" id="{{product._id}}">
+                    Thêm Vào Giỏ Hàng
+                </button>
+                <button name="btnCartPayProduct" id="btnCartPayProduct">
+                    Mua Hàng
+                </button>
+            </div>
         </div>
     </div>
+    <p>{{product.description}}</p>
 </div>
+
+<form name="post-cart-product" method="POST">
+    <input type="hidden" name="price" id="price">
+    <input type="hidden" name="quantity" id="quantity" value="1">
+    <input type="hidden" name="size" id="size">
+    <input type="hidden" name="color" id="color">
+    <input type="hidden" name="totalmoney" id="totalmoney">
+</form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var btnAddProduct = document.querySelectorAll('.add-to-cart-btn');
+        var portCartProduct = document.forms['post-cart-product'];
+        
+        // Tăng giảm số lượng khi nhấn các nút + và -
+        document.querySelector('.decrease-qty').onclick = function() {
+            var quantitySpan = document.querySelector('.quantity');
+            var currentQuantity = parseInt(quantitySpan.innerText);
+            if (currentQuantity > 1) {
+                quantitySpan.innerText = currentQuantity - 1;
+            }
+        };
+
+        document.querySelector('.increase-qty').onclick = function() {
+            var quantitySpan = document.querySelector('.quantity');
+            var currentQuantity = parseInt(quantitySpan.innerText);
+            quantitySpan.innerText = currentQuantity + 1;
+        };
+
+        btnAddProduct.forEach(function(e) {
+            e.onclick = function() {
+                var selectedSize = document.querySelector('input[name="size"]:checked');
+                var selectedColor = document.querySelector('input[name="color"]:checked');
+
+                if (!selectedSize || !selectedColor) {
+                    alert("Vui lòng chọn một size và một màu trước khi thêm vào giỏ hàng hoặc mua hàng.");
+                    return;
+                }
+
+                var color = selectedColor.value;
+                var size = selectedSize.value;
+                var quantity = parseInt(document.querySelector('.quantity').innerText);
+                var price = parseFloat(document.getElementById('display-price').innerText);
+                var totalmoney = price * quantity;
+
+                portCartProduct.querySelector('#price').value = price;
+                portCartProduct.querySelector('#quantity').value = quantity;
+                portCartProduct.querySelector('#size').value = size;
+                portCartProduct.querySelector('#color').value = color;
+                portCartProduct.querySelector('#totalmoney').value = totalmoney;
+
+                portCartProduct.action = '/carts/' + e.id;
+                portCartProduct.submit();
+            }
+        });
+    });
+</script>

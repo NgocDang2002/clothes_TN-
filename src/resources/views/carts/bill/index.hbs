@@ -1,0 +1,135 @@
+<form class="mt-4" name="container-form" method="POST" action="">
+  <div>
+    <h1>Quản Lý Danh Sách Đơn Hàng</h1>
+    <a href="/products/trash">Thùng rác</a>
+      <div class="mt-4 d-flex align-items-center">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="checkbox-all">
+          <label class="form-check-label" for="checkbox-all">
+            Chọn Tất cả
+          </label>
+        </div>
+
+        <select style="width: 160px; margin: 0 16px;" class="form-select checkbox-select-all-options" name="action" required>
+          <option value="">-- Hành động --</option>
+          <option value="delete">Xóa</option>
+        </select>
+
+        <button class="btn btn-primary btn-sm check-all-submit-btn disabled">Thực Hiện</button>
+      </div>
+
+
+
+    <table class="table mt-4">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">STT</th>
+            <th scope="col">
+              Địa chỉ
+              {{!-- {{{sortable 'name' _sort}}} --}}
+            </th>
+            <th scope="col">
+              Số ĐT
+              {{!-- {{{sortable 'description' _sort}}} --}}
+            </th>
+            <th scope="col">
+              Tên Khách hàng
+              {{!-- {{{sortable 'description' _sort}}} --}}
+            </th>
+            <th scope="col">
+              Sản phẩm
+              {{!-- {{{sortable 'description' _sort}}} --}}
+            </th>
+            <th scope="col">
+              Tổng
+              {{!-- {{{sortable 'description' _sort}}} --}}
+            </th>
+            <th scope="col">
+              Note
+              {{!-- {{{sortable 'description' _sort}}} --}}
+            </th>
+            <th scope="col">
+              Thời gian tạo
+              {{!-- {{{sortable 'description' _sort}}} --}}
+            </th>
+            <th scope="col">Chức năng</th>
+          </tr>
+        </thead>
+        <tbody>
+            {{#each orders}}
+            {{!-- <tr>{{this}}</tr> --}}
+            <tr>
+              <td>
+                <input class="form-check-input" type="checkbox" value="{{_id}}" >
+              </td>
+              <th scope="row">{{sum @index 1}}</th>
+                <td>
+                  {{#each this}}
+                    {{useraddress}}
+                  {{/each}}
+                </td>
+                <td>
+                  {{#each this}}
+                    {{phoneuser}}
+                  {{/each}}
+                </td>
+                <td>
+                  {{#each this}}
+                    {{username}}
+                  {{/each}}
+                </td>
+              <td>
+                <a href="{{#each this}} {{slug}} {{/each}}">Xem</a>
+              </td>
+              <td>
+                {{#each this}}
+                    {{totalorder}}
+                {{/each}}
+              </td>
+              <td>
+                {{#each this}}
+                    {{note}}
+                {{/each}}
+              </td>
+              <td>
+                {{#each this}}
+                    {{createdAt}}
+                {{/each}}
+              </td>
+              <td style="width: 150px">
+                <a href="/products/{{this._id}}/edit" class="btn btn-success">Sửa</a>
+                <a href="" data-bs-toggle="modal" class="btn btn-danger" data-id="{{this._id}}" data-bs-target="#delete-product-modal">Xóa</a>
+              </td>
+            </tr>
+            <tr>
+            </tr>
+            {{else}}
+              <td colspan="8" class="text-center">
+                Bạn chưa có đơn hàng nào
+                <a href="/products">Thêm Sản phẩm</a>
+              </td>
+            {{/each}}
+        </tbody>
+    </table>
+  </div>
+  {{!-- confirm delete  products--}}
+  <div id="delete-product-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Xóa Sản Phẩm</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Bạn chắc chắn muốn xóa sản phẩm này?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="btn-delete-product" class="btn btn-danger">Xóa bỏ</button>
+          <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+

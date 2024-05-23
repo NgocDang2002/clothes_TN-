@@ -21,7 +21,7 @@ const User = new Schema(
     address: {type : String , required: true},
     gender: {type : String , required: true},
     position: {type: String},
-    role:{type : String, default: 'user'},
+    role:{type : String, default: "user"},
     // deleted: { type: Boolean, default: false },
   },
   {

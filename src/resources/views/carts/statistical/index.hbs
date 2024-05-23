@@ -1,0 +1,212 @@
+<div class="container mt-5" width= "600px" height="300px">
+  <div class="row">
+    <div class="col-md-12">
+      <h4>Thống Kê Tổng Số Sản Phẩm Bán</h4>
+      <div class="text-center mb-3">
+        <button id="dayButtonBar" class="btn btn-info">Theo Ngày</button>
+        <button id="weekButtonBar" class="btn btn-warning">Theo Tuần</button>
+        <button id="monthButtonBar" class="btn btn-primary">Theo Tháng</button>
+        <button id="yearButtonBar" class="btn btn-secondary">Theo Năm</button>
+      </div>
+      <canvas id="columnChart"></canvas>
+    </div>
+  </div>
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <h4>So Sánh Đơn Hàng</h4>
+      <div class="text-center mb-3">
+        <button id="dayButton" class="btn btn-info">Theo Ngày</button>
+        <button id="weekButton" class="btn btn-warning">Theo Tuần</button>
+        <button id="monthButton" class="btn btn-primary">Theo Tháng</button>
+      </div>
+      <div class="pieChartDT" width="600px" height="300px" style="display: block; margin: auto">
+        <canvas id="pieChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+<script>
+  const dataFromMongoDB = {{{ordersAllJson}}}
+
+  const productsByDay = {};
+  const productsByWeek = {};
+  const productsByMonth = {};
+  const productsByYear = {};
+  const ordersByDay = {};
+
+  function getWeekNumber(date) {
+    const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+    const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
+    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+  }
+
+  dataFromMongoDB.forEach((item) => {
+    const createdAt = new Date(item.createdAt);
+    const day = `${String(createdAt.getDate()).padStart(2, '0')}/${String(createdAt.getMonth() + 1).padStart(2, '0')}/${createdAt.getFullYear()}`;
+    const week = `Week ${getWeekNumber(createdAt)}, ${createdAt.getFullYear()}`;
+    const month = `${String(createdAt.getMonth() + 1).padStart(2, '0')}/${createdAt.getFullYear()}`;
+    const year = `${createdAt.getFullYear()}`;
+
+    if (!productsByDay[day]) {
+      productsByDay[day] = 0;
+      ordersByDay[day] = 0;
+    }
+    if (!productsByWeek[week]) {
+      productsByWeek[week] = 0;
+    }
+    if (!productsByMonth[month]) {
+      productsByMonth[month] = 0;
+    }
+    if (!productsByYear[year]) {
+      productsByYear[year] = 0;
+    }
+
+    ordersByDay[day]++;
+    productsByDay[day] += item.productsid.length;
+    productsByWeek[week] += item.productsid.length;
+    productsByMonth[month] += item.productsid.length;
+    productsByYear[year] += item.productsid.length;
+  });
+
+  const dayLabels = Object.keys(productsByDay).sort((a, b) => {
+    const [dayA, monthA, yearA] = a.split('/').map(Number);
+    const [dayB, monthB, yearB] = b.split('/').map(Number);
+    return new Date(yearA, monthA - 1, dayA) - new Date(yearB, monthB - 1, dayB);
+  });
+  const dayProductCounts = dayLabels.map(date => productsByDay[date]);
+
+  const columnChartData = {
+    labels: dayLabels,
+    datasets: [{
+      label: 'Total Products Sold',
+      backgroundColor: 'rgba(75, 192, 192, 0.5)',
+      borderColor: 'rgba(75, 192, 192, 1)',
+      borderWidth: 1,
+      data: dayProductCounts
+    }]
+  };
+
+  const columnConfig = {
+    type: 'bar',
+    data: columnChartData,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  };
+
+  var columnChart = new Chart(
+    document.getElementById('columnChart'),
+    columnConfig
+  );
+
+  const pieData = {
+    labels: dayLabels,
+    datasets: [{
+      label: 'Number of Orders',
+      backgroundColor: ['#ffcd56', '#ff6384', '#36a2eb', '#fd6b19', '#4bc0c0', '#9966ff', '#ff0000', '#00ff00', '#0000ff', '#ffa500'],
+      data: dayLabels.map(date => ordersByDay[date] || 0)
+    }]
+  };
+
+  const pieConfig = {
+    type: 'pie',
+    data: pieData
+  };
+
+  var pieChart = new Chart(
+    document.getElementById('pieChart'),
+    pieConfig
+  );
+
+  function updateColumnChart(data, label) {
+    const labels = Object.keys(data).sort((a, b) => {
+      const [dayA, monthA, yearA] = a.split('/').map(Number);
+      const [dayB, monthB, yearB] = b.split('/').map(Number);
+      return new Date(yearA, monthA - 1, dayA) - new Date(yearB, monthB - 1, dayB);
+    });
+    const chartData = labels.map(key => data[key]);
+
+    columnChart.data.labels = labels;
+    columnChart.data.datasets[0].data = chartData;
+    columnChart.data.datasets[0].label = label;
+    columnChart.update();
+  }
+
+  function groupByWeek(data) {
+    const result = {};
+    data.forEach((item) => {
+      const createdAt = new Date(item.createdAt);
+      const week = `Week ${getWeekNumber(createdAt)}, ${createdAt.getFullYear()}`;
+      
+      if (!result[week]) {
+        result[week] = 0;
+      }
+      result[week]++;
+    });
+    return result;
+  }
+
+  function groupByMonth(data) {
+    const result = {};
+    data.forEach((item) => {
+      const createdAt = new Date(item.createdAt);
+      const month = `${String(createdAt.getMonth() + 1).padStart(2, '0')}/${createdAt.getFullYear()}`;
+      
+      if (!result[month]) {
+        result[month] = 0;
+      }
+      result[month]++;
+    });
+    return result;
+  }
+
+  function updatePieChart(data) {
+    const labels = Object.keys(data).sort((a, b) => {
+      const [dayA, monthA, yearA] = a.split('/').map(Number);
+      const [dayB, monthB, yearB] = b.split('/').map(Number);
+      return new Date(yearA, monthA - 1, dayA) - new Date(yearB, monthB - 1, dayB);
+    });
+    const chartData = labels.map(key => data[key]);
+
+    pieChart.data.labels = labels;
+    pieChart.data.datasets[0].data = chartData;
+    pieChart.update();
+  }
+
+  document.getElementById('dayButtonBar').addEventListener('click', () => {
+    updateColumnChart(productsByDay, 'Total Products Sold Per Day');
+  });
+
+  document.getElementById('weekButtonBar').addEventListener('click', () => {
+    updateColumnChart(productsByWeek, 'Total Products Sold Per Week');
+  });
+
+  document.getElementById('monthButtonBar').addEventListener('click', () => {
+    updateColumnChart(productsByMonth, 'Total Products Sold Per Month');
+  });
+
+  document.getElementById('yearButtonBar').addEventListener('click', () => {
+    updateColumnChart(productsByYear, 'Total Products Sold Per Year');
+  });
+
+  document.getElementById('dayButton').addEventListener('click', () => {
+    updatePieChart(ordersByDay);
+  });
+
+  document.getElementById('weekButton').addEventListener('click', () => {
+    const weeklyData = groupByWeek(dataFromMongoDB);
+    updatePieChart(weeklyData);
+  });
+
+  document.getElementById('monthButton').addEventListener('click', () => {
+    const monthlyData = groupByMonth(dataFromMongoDB);
+    updatePieChart(monthlyData);
+  });
+</script>

@@ -17,10 +17,7 @@
 
         <button class="btn btn-primary btn-sm check-all-submit-btn disabled">Thực Hiện</button>
       </div>
-
-
-
-    <table class="table mt-4">
+    <table class="table">
         <thead>
             <tr>
                 <th scope="col">#</th>
@@ -35,11 +32,16 @@
                 </th>
                 <th scope="col">
                   Màu Sác
-    
                 </th>
                 <th scope="col">
                   Giá Tiền
                   {{{sortable 'price' _sort}}}
+                </th>
+                <th scope="col">
+                  Loại sản phẩm
+                </th>
+                <th scope="col">
+                  Số lượng
                 </th>
                 <th scope="col">
                   thời gian tạo
@@ -59,7 +61,9 @@
                     <td>{{this.description}}</td>
                     <td>{{this.color}}</td>
                     <td>{{this.price}}</td>
-                    <td>{{this.createdAt}}</td>
+                    <td>{{this.categories}}</td>
+                    <td>{{this.quantity}}</td>
+                    <td class="datetimeCell" >{{this.createdAt}}</td>
                     <td style="width: 150px">
                         <a href="/products/{{this._id}}/edit" class="btn btn-success">Sửa</a>
                         <a href="" data-bs-toggle="modal" class="btn btn-danger" data-id="{{this._id}}" data-bs-target="#delete-product-modal">Xóa</a>
@@ -98,6 +102,7 @@
 <form name="delete-product-from" method="POST"></form>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="/js/convert.js"></script>
 
 <script>
     var productId;

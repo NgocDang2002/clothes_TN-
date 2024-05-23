@@ -1,0 +1,109 @@
+<div class="mt-4">
+    <h1>Thanh Toán</h1>
+    <form name="cartpayproduct-form" method="POST" action="/carts/handle-form-cartpayproduct">
+        <h4>Địa Chỉ Nhận Hàng</h4>
+        <table>
+            <div style="margin: 20px;">
+                <tr>
+                    {{#if isAuthenticated}}
+                    <th style="padding-right: 32px;">{{user.name}} {{user.phone}}</th>
+                    <td style="padding-right: 32px;">{{user.address}}</td>
+                    {{/if}}
+                    <td style="padding-right: 32px;">Thay đổi</td>
+                </tr>
+            </div>
+        </table>
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col" colspan="1">Sản Phẩm</th>
+                    <th scope="col">Đơn Giá</th>
+                    <th scope="col">Số Lượng</th>
+                    <th scope="col">Số Tiền</th>
+                    <th scope="col">Thao Tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each carts}}
+                <tr>
+                    {{#each productid}}
+                    <td>
+                        <div style="display: flex;">
+                            <div>
+                                {{#each this}}
+                                <img src="{{image}}" style="width: 100px;" alt="{{name}}">
+                                {{name}}
+                                {{/each}}
+                            </div>
+                            <div>
+                                <p class="size">Size: {{../size}}</p>
+                                <p class="color">Color: {{../color}}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        {{#each this}}
+                            {{price}}
+                            <input type="hidden" name="productId[]" value="{{_id}}">
+                        {{/each}}
+                    </td>
+                    {{/each}}
+                    <input type="hidden" name="quantity[]" value="{{quantity}}">
+                    <input type="hidden" name="size[]" value="{{size}}">
+                    <input type="hidden" name="color[]" value="{{color}}">
+                    <td>{{quantity}}</td>
+                    <td class="totalmoney">{{totalmoney}}</td>
+                    <td>Xóa</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <div>
+            <label for="orderNote">Ghi Chú:</label>
+            <textarea name="orderNote" id="orderNote" rows="4" cols="50"></textarea>
+        </div>
+        
+        <table>
+            <tr>
+                <td>
+                    <h4>Phương thức thanh toán</h4>
+                </td>
+                <td style="display: flex;">
+                    <div>Thanh Toán Khi Nhận Hàng</div>
+                </td>
+            </tr>
+            <tr>
+                <td id="shipping-fee">Phí thu hộ: ₫0 VNĐ. Ưu đãi về phí vận chuyển (nếu có) áp dụng cả với phí thu hộ.</td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border-radius: 2px; box-sizing: border-box; font-size: .875rem; font-weight: 300; height: 2.5rem; margin: 0 22px 0 15px; padding: 13px 36px; text-transform: capitalize; width: 13.125rem;">
+                    <button name="bntCartPayProduct" id="bntCartPayProduct" style="background: #ee4d2d; outline: 0; overflow: visible; position: relative; width: 13.125rem; height: 3rem;">
+                        Thanh Toán
+                    </button>
+                </td>
+            </tr>
+        </table>
+        <input type="hidden" name="totalMoney" id="totalMoney" value="0">
+    </form>
+</div>
+
+<script>
+    function calculateTotalMoney() {
+        const totalMoneyCells = document.querySelectorAll('td.totalmoney');
+        let totalMoney = 0;
+        totalMoneyCells.forEach(cell => {
+            totalMoney += parseFloat(cell.textContent) || 0;
+        });
+        const shippingFeeCell = document.getElementById('shipping-fee');
+        shippingFeeCell.textContent = `Phí thu hộ: ₫${totalMoney.toLocaleString('vi-VN')} VNĐ. Ưu đãi về phí vận chuyển (nếu có) áp dụng cả với phí thu hộ.`;
+
+        document.getElementById('totalMoney').value = totalMoney;
+    }
+
+    document.addEventListener('DOMContentLoaded', calculateTotalMoney);
+
+    document.querySelector('form[name="cartpayproduct-form"]').addEventListener('submit', function(event) {
+        calculateTotalMoney();
+    });
+</script>

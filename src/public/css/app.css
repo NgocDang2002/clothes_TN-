@@ -1,3 +1,7 @@
+*{
+  margin: 0;
+  padding: 0;
+}
 .bd-example .carousel-inner .active input {
   height: 567.406px;
 }

@@ -11,6 +11,7 @@ router.get('/login',
 );
 router.post('/loginUser', 
     authMiddleware.isAuthenticated,
+    authMiddleware.authenticateUser,
     userController.loginUser
 );
 // Route GET để hiển thị trang đăng xuất
@@ -19,8 +20,8 @@ router.get('/logoutUser',
 );
 // // Route POST để xử lý việc đăng xuất
 router.post('/logoutUser', 
-    authMiddleware.redirectMiddleware ,
-        userController.logoutUser
+    authMiddleware.redirectMiddleware,
+    userController.logoutUser
 );
 router.post('/position',
     upload.single('avatar'), 

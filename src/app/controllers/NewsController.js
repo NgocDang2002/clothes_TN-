@@ -6,8 +6,8 @@ class NewsController {
     index (req,res) {
         res.render('news', {
             isAuthenticated: res.locals.isAuthenticated,
-            // user : mongooseToObject(req.user), // Đã được lưu trong middleware authenticateUser
-            users: mongooseToObject(res.locals.users)
+            isAdmin: res.locals.isAdmin, // Truyền giá trị isAdmin vào template
+            user: mongooseToObject(res.locals.user)
         });
     }
     // [GET] / news /:slug

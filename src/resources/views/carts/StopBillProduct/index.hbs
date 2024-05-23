@@ -1,0 +1,52 @@
+<div class="mt-4">
+    <h1>Thông Tin Sản Phẩm</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col" colspan="1">Sản Phẩm</th>
+                <th scope="col">Đơn Giá</th>
+                <th scope="col">Số Lượng</th>
+                <th scope="col">Số Tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#with order}}
+            {{#each productsid}}
+            <tr>
+                <td>
+                    <img style="width: 100px;" src="{{#each this}} {{#each this}} {{image}} {{/each}}{{/each}}" alt="{{#each this}} {{#each this}} {{name}} {{/each}}{{/each}}">
+                    {{#each this}} {{#each this}} {{name}} {{/each}}{{/each}}
+                    <div>
+                        <p>size: {{size}} </p>
+                        <p>Màu :{{color}}</p>
+                    </div>
+                </td>
+                <td class="price">
+                    {{#each this}} {{#each this}} {{price}} {{/each}}{{/each}}
+                </td>
+                <td class="quantity">
+                    {{quantity}}
+                </td>
+                <td class="total"></td>
+            </tr>
+            {{/each}}
+            {{/with}}
+        </tbody>
+    </table>
+</div>
+<script>
+    // Lấy tất cả các dòng sản phẩm
+    const rows = document.querySelectorAll('tbody tr');
+
+    rows.forEach(row => {
+        // Lấy giá và số lượng từ mỗi dòng
+        const price = parseFloat(row.querySelector('.price').innerText.trim());
+        const quantity = parseInt(row.querySelector('.quantity').innerText.trim());
+
+        // Tính tổng số tiền
+        const total = price * quantity;
+
+        // Cập nhật tổng số tiền vào ô tương ứng
+        row.querySelector('.total').innerText = total.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+    });
+</script>

@@ -1,19 +1,12 @@
 const mongoose = require('mongoose');
-const slug = require('mongoose-slug-generator');
+// const slug = require('mongoose-slug-generator');
+const slug = require('mongoose-slug-updater');
 const mongooseDelete = require('mongoose-delete');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 
-// const { connect } = require('../../config/db/index');
 
 
 const Schema = mongoose.Schema;
-
-
-// Tạo một kết nối mới đến cơ sở dữ liệu cụ thể
-// mongoose.connect('product');
-
-// connect('product');
-
 
 const Products = new Schema(
   {
@@ -22,15 +15,20 @@ const Products = new Schema(
     description: {type : String , maxLength : 600},
     image: {type : String , maxLength : 255},
     price: {type : Number, required: true},
-    color:{type : String, required: true},
-    slug: {type: String, slug: 'name'},
+    colors: [{type : String, required: true}],
+    sizes: [{ type: String, required: true }],
+    slug: {type: String, slug: ["name", "_id"], unique: true,},
+    categories: { type: String, required: true},
+    quantity: { type: Number, required: true},
     deleted: { type: Boolean, default: false },
   },
   {
     _id: false,
-    timestamps: true,
+    // timestamps: true,
+    timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' },
   },
 );
+
 
 
 

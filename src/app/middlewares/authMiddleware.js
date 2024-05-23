@@ -1,5 +1,4 @@
 // middlewares/authMiddleware.js
-
 const User = require('../models/User-models');
 
 
@@ -35,6 +34,8 @@ exports.protect = (req, res, next) => {
             .then(user => {
                 if (!user) {
                     // Không tìm thấy người dùng, chuyển tiếp cho middleware/route khác
+                    req.session.isAuthenticated = false;
+                    res.status(401).send('Bạn chưa đăng nhập!');
                     next();
                 } else {
                     req.user = user;
@@ -45,9 +46,11 @@ exports.protect = (req, res, next) => {
                 res.status(500).send('Lỗi xác thực người dùng!');
             });
     } else {
+        // res.status(500).send('Lỗi');
         next();
     }
 };
+
 
 // lấy ra thông tin người dùng khi đăng nhập
 exports.authenticateUser = (req, res, next) => {
@@ -58,6 +61,14 @@ exports.authenticateUser = (req, res, next) => {
             .then(user => {
                 if (!user) {
                     throw new Error('Không tìm thấy người dùng!');
+                }
+                // Kiểm tra xem người dùng có vai trò là admin không
+                if (user.role === 'admin') {
+                    // Nếu là admin, trả về một giá trị nào đó
+                    res.locals.isAdmin = true;
+                } else {
+                    // Nếu không phải là admin, trả về một giá trị khác
+                    res.locals.isAdmin = false;
                 }
                 req.user = user;
                 res.locals.isAuthenticated = true; // Truyền trạng thái xác thực vào res.locals

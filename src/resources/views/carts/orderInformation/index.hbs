@@ -1,0 +1,50 @@
+<div class="mt-4">
+  <h1>Danh Đơn Hàng</h1>
+    <table class="table">
+      <thead >
+        <tr>
+          <th scope="col" >#</th>
+          <th scope="col">Sản Phẩm</th>
+          <th scope="col">Đơn Giá</th>
+          <th scope="col">Số Lượng</th>
+          <th scope="col">Số Tiền</th>
+          <th scope="col">Thao Tác</th>
+        </tr>
+      </thead>
+      <tbody >
+        {{#if order}}
+          {{!-- <th scope="row">{{order._id}}</th> --}}
+          {{!-- <th scope="row">{{order.productsid}}</th> --}}
+        {{#if order.productsid}}
+        {{#each order.productsid}}
+        <tr>
+          <td scope="row">{{sum @index 1}}</td>
+          <td scope="row">
+            {{#each this}}
+              <img style="width: 100px;" src="{{image}}" alt="">
+              {{name}}
+            {{/each}}
+          </td>
+          <td scope="row">
+            {{#each this}}
+              {{price}}
+            {{/each}}
+          </td>
+          <td scope="row">
+            2
+          </td>
+          <td scope="row">
+            5
+          </td>
+          <td style="width: 150px">
+            <a href="/products/{{this._id}}/edit" class="btn btn-success">Sửa</a>
+            <a href="" data-bs-toggle="modal" class="btn btn-danger" data-id="{{this._id}}" data-bs-target="#delete-product-modal">Xóa</a>
+            </td>
+        </tr>
+        {{/each}}
+        {{/if}}
+
+        {{/if}}
+      </tbody>
+    </table>
+</div>

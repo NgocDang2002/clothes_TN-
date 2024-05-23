@@ -63,31 +63,50 @@ app.engine(
   'hbs', 
   handlebars.engine( { 
     extname: '.hbs',
+    defaultLayout: 'main',
     helpers: {
-        sum: (a , b) => a + b,
-        sortable: (field, sort) =>{
-          const sortType = field === sort.column ? sort.type : 'default'
-  
-  
-          const icons = {
-            default: 'bi bi-chevron-expand',
-            asc: 'bi bi-sort-down-alt',
-            desc: 'bi bi-sort-down',
-          }
-  
-          const types = {
-            default: 'desc',
-            asc: 'desc',
-            desc: 'asc',
-          }
-  
-          const icon = icons[sortType];
-          const type = types[sortType];
-  
-          return `<a href="?_sort&column=${field}&type=${type}">
-          <i class="${icon}"></i>
-          </a> `;
+      // Định nghĩa hàm trợ giúp eq
+      eq: function(a, b, options) {
+        if (a === b) {
+            if (options && typeof options.fn === 'function') {
+                return options.fn(this);
+            } else {
+                return ''; // hoặc có thể trả về một giá trị mặc định khác tùy thuộc vào trường hợp của bạn
+            }
+        } else {
+            if (options && typeof options.inverse === 'function') {
+                  return options.inverse(this);
+            } else {
+                return ''; // hoặc có thể trả về một giá trị mặc định khác tùy thuộc vào trường hợp của bạn
+            }
         }
+      },      
+      sum: (a , b) => a + b,
+      sortable: (field, sort) =>{
+        const sortType = field === sort.column ? sort.type : 'default'
+        const icons = {
+          default: 'bi bi-chevron-expand',
+          asc: 'bi bi-sort-down-alt',
+          desc: 'bi bi-sort-down',
+        }  
+        const types = {
+          default: 'desc',
+          asc: 'desc',
+          desc: 'asc',
+        }
+  
+        const icon = icons[sortType];
+        const type = types[sortType];
+        return `<a href="?_sort&column=${field}&type=${type}">
+        <i class="${icon}"></i>
+        </a> `;
+      },
+      helpers: {
+        formatDate: function(dateStr) {
+          const date = parseISOString(dateStr); // Sử dụng parseISOString từ dateFormat.js
+          return isoFormatDMY(date); // Sử dụng isoFormatDMY từ dateFormat.js
+        }
+      }
           
     }
   })

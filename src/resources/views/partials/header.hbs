@@ -22,21 +22,67 @@
                 <button class="btn btn-outline-success" type="submit">Search</button>
               </form>
           </li>
-          <li><i class="bi bi-bag-fill"></i></li>
+          <li>
+            <div>
+              <div>
+                <a href="/carts">
+                  <i class="bi bi-cart" style="width: 40px; height: 60px; color: #fff; "></i>
+                </a>
+              </div>
+              {{!-- <div style="background-color: rgb(255, 255, 255); width: 400px;height: 100%;">
+                <table style="width: 400px;height: auto; ">
+                  <tr>
+                    <td colspan="2">Sản phẩm mới thêm</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div style="display: flex; grid-gap: 1rem;">
+                        <img src="/img/ao-1.jpg" style="width: 40px; border: 1px solid;color: #d5d5d5;" alt="">
+                        <p style="width: 80%; height: 100%;">Áo phông máy</p>
+                      </div>
+                    </td>
+                    <td>
+                        <div>
+                          <p style="margin-left: 10px; color: red;">100.000</p>
+                        </div>
+                    </td>
+                  </tr>
+                </table>
+              </div> --}}
+            </div>
+          </li>
+          <li>
+            <a href="">
+              <i class="bi bi-bell-fill" style="width: 40px; height: 60px; color: #fff; "></i>
+            </a>
+          </li>
           {{#if isAuthenticated}}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   <img src="{{user.image}}" alt="{{user.name}}" class="user-avata">
                   {{user.name}}
                 </a>
-              <ul class="dropdown-menu ml-auto">
-                <li><a class="dropdown-item" href="/products/create">Thêm sản Phẩm</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="/products/stored">Quản lý sản Phẩm</a></li>
-                <li><a class="dropdown-item" href="/admin/user">Quản lý người dùng</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="logoutUser">Đăng xuất</a></li>
-              </ul>
+                {{#if isAdmin}}
+                  <ul class="dropdown-menu ml-auto">
+                    <li><a class="dropdown-item" href="/products/create">Thêm sản Phẩm</a></li>
+                    <li><a class="dropdown-item" href="/products/categories">Thêm nhóm sản</a></li>
+                    <li><a class="dropdown-item" href="/products/sizes">Thêm Size</a></li>
+                    <li><a class="dropdown-item" href="/products/colors">Thêm Màu Sản Phẩm</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/products/stored">Quản lý sản Phẩm</a></li>
+                    <li><a class="dropdown-item" href="/admin/user">Quản lý người dùng</a></li>
+                    <li><a class="dropdown-item" href="/carts/bill">Quản lý danh sách đơn hàng</a></li>
+                    <li><a class="dropdown-item" href="/carts/statistical">Quản lý thống kê</a></li>
+                    <li><a class="dropdown-item" href="/carts/billUser">Quản lý đơn hàng</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="logoutUser">Đăng xuất</a></li>
+                  </ul>
+                {{else}}
+                    <ul class="dropdown-menu ml-auto">
+                      <li><a class="dropdown-item" href="/carts/billUser">Quản lý đơn hàng</a></li>
+                      <li><a class="dropdown-item" href="logoutUser">Đăng xuất</a></li>
+                    </ul>
+                {{/if}}
             </li>          
           {{else}}
             <li>

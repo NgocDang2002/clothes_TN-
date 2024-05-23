@@ -11,6 +11,7 @@ class UserController {
         User.find({})
             .then(users => res.render('admin/user', {
             isAuthenticated: res.locals.isAuthenticated,
+            isAdmin: res.locals.isAdmin, // Truyền giá trị isAdmin vào template
             user : mongooseToObject(req.user),
             users: mutipleMongooseToObject(users),
             }))
@@ -29,8 +30,8 @@ class UserController {
         User.findOne({username})
             .then(user => {
                 res.render('home',{
-                    // condition: true,
                     isAuthenticated,
+                    isAdmin: res.locals.isAdmin, // Truyền giá trị isAdmin vào template
                     user : mongooseToObject(user),
                 })
                 req.session.user = { username }; 
